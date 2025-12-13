@@ -15,10 +15,23 @@ class Level
 {
 
 public:
+	//-----------------------------------------------------
+	// Added by @Emilien
 
 	/** @brief Instantiate a level object. */
-	Level();
+	Level(AircraftType type);
 	virtual ~Level();
+
+	/** Player ship management */
+	virtual void SetPlayerShip(PlayerShip* pPlayerShip) { m_pPlayerShip = pPlayerShip; }
+	PlayerShip* GetPlayerShip() const { return m_pPlayerShip; }
+
+	/** Projectile pool access */
+	std::vector<Projectile*>& GetProjectiles() { return m_projectiles; }
+
+
+	//End-----------------------------------------------
+
 
 	/** @brief Load the content for the level, including game objects and resources.
 		@param resourceManager A reference to the game's resource manager,
@@ -127,6 +140,9 @@ protected:
 	/** @brief Get the background audio for the level.
 		@return A pointer to the audio sample to play. */
 	virtual AudioSample* GetBackgroundAudio() { return m_pAudio; }
+
+	/** @brief store the selected aircraft type. */
+	AircraftType m_aircraftType;
 
 private:
 
