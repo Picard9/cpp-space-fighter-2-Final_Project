@@ -36,6 +36,9 @@
     <Filter Include="Source Files\Game Objects\Misc">
       <UniqueIdentifier>{02ce19ac-33ef-46f4-b36c-95e29c76d41f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Score">
+      <UniqueIdentifier>{81232a41-4edd-48be-8f2f-c45cb1121c42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd">
