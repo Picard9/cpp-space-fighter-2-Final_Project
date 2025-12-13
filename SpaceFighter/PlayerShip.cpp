@@ -33,11 +33,25 @@ void PlayerShip::LoadContent(ResourceManager& resourceManager)
 
 		m_pTexture = resourceManager.Load<Texture>("Textures\\LightFighterShip.png");
 		SetSpeed(500);
+		Weapon* pWeapon = GetWeapon("Main Blaster");
+		if (pWeapon)
+		{
+			AudioSample* pAudio = resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
+			pAudio->SetVolume(0.5f);
+			pWeapon->SetFireSound(pAudio);
+		}
 		break;
 
 	case AircraftType::HeavyBomber:
 		m_pTexture = resourceManager.Load<Texture>("Textures\\HeavyBomberShip.png");
 		SetSpeed(250);
+		Weapon* pWeapon = GetWeapon("Main Blaster");
+		if (pWeapon)
+		{
+			AudioSample* pAudio = resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
+			pAudio->SetVolume(0.5f);
+			pWeapon->SetFireSound(pAudio);
+		}
 		break;
 
 	case AircraftType::DefaultFighter:
