@@ -36,6 +36,9 @@
     <Filter Include="Source Files\Game Objects\Misc">
       <UniqueIdentifier>{02ce19ac-33ef-46f4-b36c-95e29c76d41f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Score">
+      <UniqueIdentifier>{81232a41-4edd-48be-8f2f-c45cb1121c42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd">
@@ -107,6 +110,15 @@
     <ClCompile Include="AircraftType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Victory.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files\Score</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainMenuScreen.h">
@@ -168,6 +180,15 @@
     </ClInclude>
     <ClInclude Include="AircraftType.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Source Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Victory.h">
+      <Filter>Source Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Source Files\Score</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

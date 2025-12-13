@@ -6,7 +6,8 @@
 #include "PlayerShip.h"  
 #include "Blaster.h"     
 #include "Projectile.h"     
-
+#include "GameOver.h"
+#include "Victory.h"
 
 
 GameplayScreen::GameplayScreen(AircraftType aircraftType)
@@ -77,10 +78,46 @@ void GameplayScreen::HandleInput(const InputState& input)
 	m_pLevel->HandleInput(input);
 }
 
-void GameplayScreen::Update(const GameTime& gameTime)
+void GameplayScreen::Update(const GameTime& gameTime) // updated the update to see if the game is over or a victory -- tommy
 {
-	m_pLevel->Update(gameTime);
+
+    m_pLevel->Update(gameTime);
+
+    if (m_gameEnded)
+        return;
+
+    PlayerShip* pPlayer = m_pLevel->GetPlayerShip();
+
+    // gives us a gameover screen oncce done.
+    if (pPlayer && !pPlayer->IsActive())
+    {
+        m_gameEnded = true;
+
+        SetOnRemove([this]()
+            {
+                AddScreen(new GameOverScreen());
+            });
+
+        Exit();
+        return;
+    }
+
+    // gives us a victory screen once done.
+    if (m_pLevel->IsComplete())
+    {
+        m_gameEnded = true; 
+
+        SetOnRemove([this]()
+            {
+                AddScreen(new VictoryScreen());
+            });
+
+        Exit();
+        return;
+    }
 }
+
+
 
 void GameplayScreen::Draw(SpriteBatch& spriteBatch)
 {
