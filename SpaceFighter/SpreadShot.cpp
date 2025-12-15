@@ -49,7 +49,7 @@ void SpreadShot::Fire(TriggerType triggerType)
     }
     else
     {
-        offsets.push_back(Vector2(0, -10)); // single bullet in center if only 1 projectile
+        offsets.push_back(Vector2(0, -10)); // single bullet in center if only 1 projectile.
     }
 
     // Fire each projectile in the spread

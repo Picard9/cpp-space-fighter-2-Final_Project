@@ -7,6 +7,7 @@
 #include "SingleShot.h"
 #include "SpreadShot.h"
 
+
 Texture* Projectile::s_pTexture = nullptr;
 
 // User Stored selection
@@ -16,21 +17,21 @@ PlayerShip::PlayerShip(AircraftType type, std::vector<Projectile*>* pProjectileP
 	// Assign default weapon based on type
 	switch (m_type)
 	{
-		case AircraftType::DefaultFighter:
-		case AircraftType::LightFighter:
-		{
-			Weapon* pWeapon = new SingleShot("SingleShot");
-			pWeapon->SetProjectilePool(m_pProjectilePool); // pool of Projectile*
-			AttachItem(pWeapon, Vector2(0, -20));
-			break;
-		}
-		case AircraftType::HeavyBomber:
-		{
-			Weapon* pWeapon = new SpreadShot("Spread Shot", 5, 45.0f);
-			pWeapon->SetProjectilePool(m_pProjectilePool);
-			AttachItem(pWeapon, Vector2(0, -25));
-			break;
-		}
+	case AircraftType::DefaultFighter:
+	case AircraftType::LightFighter:
+	{
+		Weapon* pWeapon = new SingleShot("Main Blaster");
+		pWeapon->SetProjectilePool(m_pProjectilePool); // pool of Projectile*
+		AttachItem(pWeapon, Vector2(0, -20));
+		break;
+	}
+	case AircraftType::HeavyBomber:
+	{
+		Weapon* pWeapon = new SpreadShot("Spread Shot", 5, 45.0f);
+		pWeapon->SetProjectilePool(m_pProjectilePool);
+		AttachItem(pWeapon, Vector2(0, -25));
+		break;
+	}
 	}
 }
 
@@ -45,12 +46,12 @@ void PlayerShip::LoadContent(ResourceManager& resourceManager)
 	{
 	case AircraftType::LightFighter:
 		m_pTexture = resourceManager.Load<Texture>("Textures\\LightFighterShip.png");
-		SetSpeed(450);
+		SetSpeed(300);
 		break;
 
 	case AircraftType::HeavyBomber:
 		m_pTexture = resourceManager.Load<Texture>("Textures\\HeavyBomberShip.png");
-		SetSpeed(250);
+		SetSpeed(25);
 		break;
 
 	case AircraftType::DefaultFighter:
@@ -70,16 +71,11 @@ void PlayerShip::LoadContent(ResourceManager& resourceManager)
 		Texture* bulletTexture = nullptr;
 
 		// Keep your original paths
-		if (weapon->GetKey() == "Single Shot") bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\Bullet.png");
-		else if (weapon->GetKey() == "Spread Shot") bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\bulletttt.png");
-		//else bulletTexture = resourceManager.Load<Texture>("Textures\\Bullet.png");
-
-		
-
-		if (!bulletTexture)
-		{
-			bulletTexture = resourceManager.Load<Texture>("Textures\\Bullet.png"); 
-		}
+		if (weapon->GetKey() == "Main Blaster")
+			bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\SpreadShot.png");
+		else if (weapon->GetKey() == "Spread Shot")
+			bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\bulletttt.png");
+		else bulletTexture = resourceManager.Load<Texture>("Textures\\Bullet.png"); 
 
 		// Assign texture to all projectiles in the pool
 		for (Projectile* pProj : *m_pProjectilePool)
@@ -97,6 +93,21 @@ void PlayerShip::LoadContent(ResourceManager& resourceManager)
 	SetPosition(Game::GetScreenCenter() + Vector2::UNIT_Y * 300);
 }
 
+
+//void PlayerShip::LoadContent(ResourceManager& resourceManager)
+//{
+//	ConfineToScreen();
+//	SetResponsiveness(0.1);
+//
+//	m_pTexture = resourceManager.Load<Texture>("Textures\\PlayerShip.png");
+//
+//	AudioSample* pAudio = resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
+//	pAudio->SetVolume(0.5f);
+//	GetWeapon("Main Blaster")->SetFireSound(pAudio);
+//
+//	SetPosition(Game::GetScreenCenter() + Vector2::UNIT_Y * 300);
+//
+//}
 
 
 void PlayerShip::Initialize(Level* pLevel, Vector2& startPosition)
@@ -170,7 +181,7 @@ void PlayerShip::Update(const GameTime& gameTime)
 			// move the ship to the left edge of the screen (keep Y the same)
 			SetPosition(Left + GetHalfDimensions().X, pPosition->Y);
 			m_velocity.X = 0; // remove any velocity that could potentially
-			// keep the ship pinned against the edge
+							  // keep the ship pinned against the edge
 		}
 		if (pPosition->X + GetHalfDimensions().X > Right) // right edge?
 		{
@@ -210,17 +221,4 @@ Vector2 PlayerShip::GetHalfDimensions() const
 void PlayerShip::SetResponsiveness(const float responsiveness)
 {
 	m_responsiveness = Math::Clamp(0, 1, responsiveness);
-}
-
-void Projectile::Activate(const Vector2& position, bool isFriendly, const Vector2& velocity)
-{
-    SetPosition(position);        // Set projectile start position
-    m_velocity = velocity;        // Set velocity
-
-    // Force straight movement (prevents spread)
-    m_direction = velocity;
-    m_direction.Normalize();
-
-    m_isFriendly = isFriendly;
-    GameObject::Activate();       // Call base activate to mark as active
 }

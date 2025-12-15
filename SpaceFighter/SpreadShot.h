@@ -8,21 +8,20 @@
 class SpreadShot : public Weapon
 {
 public:
-     //@param key Unique identifier for the weapon.
-    //@param projectilesPerShot Number of projectiles per Shot.
-    //@param spreadAngle Total angular spread in degrees.
-    SpreadShot(const std::string& key, int projectilesPerShot = 5, float spreadAngle = 45.0f);
+    //@param key Unique identifier for the weapon.
+   //@param projectilesPerShot Number of projectiles per Shot.
+   //@param spreadAngle Total angular spread in degrees.
+    SpreadShot(const std::string& key, int projectilesPerShot = 5, float spreadAngle = 15.0f);
 
     virtual void Update(const GameTime& gameTime) override;
     virtual void Fire(TriggerType triggerType) override;
 
-    bool CanFire() const;
-    void ResetCooldown();
-
-     //Optional: Set horizontal width of the firing points across the aircraft.
+    //Optional: Set horizontal width of the firing points across the aircraft.
     void SetSpreadWidth(float width) { m_spreadWidth = width; }
 
-protected:
+private:
+    bool CanFire() const;
+    void ResetCooldown();
     int m_projectilesPerShot = 5;
     float m_spreadAngle = 45.0f;
     float m_cooldown = 0;

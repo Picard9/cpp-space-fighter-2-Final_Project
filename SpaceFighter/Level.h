@@ -17,12 +17,12 @@ class Level
 public:
 	//-----------------------------------------------------
 	// Added by @Emilien
-	std::vector<Weapon*> CreateWeaponsForAircraft(AircraftType type);
+	   std::vector<Weapon*> CreateWeaponsForAircraft(AircraftType type);
 
 	bool HasHadActiveEnemy() const { return m_hasHadActiveEnemy; } // Getter/setter to see if enemies have been active -- tommy
 
 	void SetHasHadActiveEnemy(bool value) { m_hasHadActiveEnemy = value; }
-
+	
 
 	virtual bool IsComplete() const; // checks to see if game is complete - tommy
 
@@ -50,7 +50,7 @@ public:
 	virtual void LoadContent(ResourceManager& resourceManager);
 
 	/** @brief Unload the content for the level. */
-	virtual void UnloadContent() {};
+	virtual void UnloadContent() { };
 
 	/** @brief Handle input for the level.
 		@param input The current state of all player input devices. */
@@ -158,10 +158,10 @@ protected:
 private:
 
 	bool m_hasSpawnedEnemies = false; // set enemy spawn to false - tommy
-
+	
 	bool m_hasHadActiveEnemy = false; // tracks to see if enemies have moved - tommy
 
-	static std::vector<Explosion*> s_explosions;
+	static std::vector<Explosion *> s_explosions;
 	//std::vector<Explosion *>::iterator m_explosionIt;
 
 	CollisionManager* m_pCollisionManager = nullptr;

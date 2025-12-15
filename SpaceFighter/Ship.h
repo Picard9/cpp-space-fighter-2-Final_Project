@@ -12,7 +12,7 @@ public:
 
 	/** @brief Creates a new instance of Ship. */
 	Ship();
-	virtual ~Ship() {}
+	virtual ~Ship() { }
 
 	/** @brief Updates the ship.
 		@param pGameTime A pointer to the game time object. */
@@ -46,9 +46,9 @@ public:
 		@param pWeapon A pointer to the weapon to attach.
 		@param position The position on the ship that the weapon will be attached,
 		offset from the center of the ship. */
-		//virtual void AttachWeapon(Weapon *pWeapon, Vector2 position);
+	//virtual void AttachWeapon(Weapon *pWeapon, Vector2 position);
 
-	virtual void AttachItem(IAttachment* item, Vector2 position);
+	virtual void AttachItem(IAttachment *item, Vector2 position);
 
 	/** @brief Gets the speed of the ship.
 		@return Returns the speed of the ship. */
@@ -80,10 +80,10 @@ protected:
 	/** @brief Gets a weapon from the ship's weapon list.
 		@param index The index of the weapon to get.
 		@return Returns a pointer to the weapon. */
-	virtual Weapon* GetWeapon(const std::string& key) //{ if (index < m_weapons.size()) return m_weapons[index]; return nullptr; }
+	virtual Weapon* GetWeapon(const std::string &key) //{ if (index < m_weapons.size()) return m_weapons[index]; return nullptr; }
 	{
 		if (m_attachments.find(key) == m_attachments.end()) return nullptr;
-		return dynamic_cast<Weapon*>(m_attachments[key]);
+		return dynamic_cast<Weapon *>(m_attachments[key]);
 	}
 
 	/** @brief Gets the current hit points of the ship.
@@ -107,7 +107,7 @@ private:
 
 	bool m_isInvulnurable = false;
 
-	;
+;
 
 };
 

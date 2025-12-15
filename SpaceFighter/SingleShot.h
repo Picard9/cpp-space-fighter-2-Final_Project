@@ -16,6 +16,6 @@ private:
     bool CanFire() const;
     void ResetCooldown();
 
-    float m_cooldown = 0.0f;
-    float m_cooldownSeconds = 0.03f; // FAST fire rate
+    float m_cooldown = 0;
+    float m_cooldownSeconds = 0.5f;
 };

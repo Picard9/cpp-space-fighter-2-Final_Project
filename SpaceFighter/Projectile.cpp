@@ -40,13 +40,24 @@ void Projectile::Draw(SpriteBatch& spriteBatch)
 }
 
 
-void Projectile::Activate(const Vector2& position, bool wasShotByPlayer)
+void Projectile::Activate(const Vector2 &position, bool wasShotByPlayer)
 {
 	m_wasShotByPlayer = wasShotByPlayer;
 	SetPosition(position);
 
 	GameObject::Activate();
 }
+
+//===============Added by @Emilien ===============
+
+void Projectile::Activate(const Vector2& position, bool isFriendly, const Vector2& velocity)
+{
+	SetPosition(position);
+	m_velocity = velocity;
+	m_isFriendly = isFriendly;
+	GameObject::Activate();
+}
+//===============End==============================
 
 
 std::string Projectile::ToString() const

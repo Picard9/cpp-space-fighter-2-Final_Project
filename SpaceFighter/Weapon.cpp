@@ -2,6 +2,13 @@
 #include "Projectile.h"
 #include "GameObject.h"
 
+//Weapon::Weapon(const std::string& key, bool isAttachedToPlayer, bool isActive, TriggerType triggerType)
+//	: m_key(key),
+//	m_isAttachedToPlayer(isAttachedToPlayer),
+//	m_isActive(isActive),
+//	m_triggerType(triggerType)
+//{
+//}
 
 void Weapon::SetProjectilePool(std::vector<Projectile*>* pProjectiles)
 {

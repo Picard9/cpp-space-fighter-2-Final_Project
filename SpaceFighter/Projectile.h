@@ -40,6 +40,15 @@ public:
 
 	//===============End==============================
 
+	//===============Added by @Emilien ===============
+	 
+	
+	//**New overload** for weapons that pass velocity and friendly flag
+	void Activate(const Vector2& position, bool isFriendly, const Vector2& velocity);
+
+
+	//===============End==============================
+
 	/** @brief Get the amount of damage the projectile will deal.
 		@return The amount of damage the projectile will deal. */
 	virtual float GetDamage() const { return m_damage; }

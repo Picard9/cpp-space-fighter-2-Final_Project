@@ -23,8 +23,8 @@ public:
 		@param isAttachedToPlayer Flag to specify that the attachement belongs to the player.
 		@param isActive A flag to determine if the weapon is active.
 		@param triggerType Used to map buttons/keys for firing the weapon. */
-		//Weapon(const std::string& key, bool isAttachedToPlayer = true, bool isActive = true,
-		//	TriggerType triggerType = TriggerType::Primary);
+	//Weapon(const std::string& key, bool isAttachedToPlayer = true, bool isActive = true,
+	//	TriggerType triggerType = TriggerType::Primary);
 
 	Weapon(const std::string& key, bool isAttachedToPlayer = true, bool isActive = true,
 		TriggerType triggerType = TriggerType::Primary)
