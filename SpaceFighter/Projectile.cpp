@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "Level.h"
 
-Texture *Projectile::s_pTexture = nullptr;
+//Texture *Projectile::s_pTexture = nullptr;
 
 Projectile::Projectile()
 {
@@ -12,7 +12,7 @@ Projectile::Projectile()
 
 void Projectile::Update(const GameTime& gameTime)
 {
-	if (IsActive())
+	if (IsActive() && s_pTexture)
 	{
 		Vector2 translation = m_direction * m_speed * gameTime.GetElapsedTime();
 		TranslatePosition(translation);
@@ -20,7 +20,6 @@ void Projectile::Update(const GameTime& gameTime)
 		Vector2 position = GetPosition();
 		Vector2 size = s_pTexture->GetSize();
 
-		// Is the projectile off the screen?
 		if (position.Y < -size.Y) Deactivate();
 		else if (position.X < -size.X) Deactivate();
 		else if (position.Y > Game::GetScreenHeight() + size.Y) Deactivate();
@@ -30,22 +29,25 @@ void Projectile::Update(const GameTime& gameTime)
 	GameObject::Update(gameTime);
 }
 
+
 void Projectile::Draw(SpriteBatch& spriteBatch)
 {
-	if (IsActive())
+	if (IsActive() && s_pTexture)
 	{
 		const float alpha = GetCurrentLevel()->GetAlpha();
 		spriteBatch.Draw(s_pTexture, GetPosition(), Color::WHITE * alpha, s_pTexture->GetCenter());
 	}
 }
 
-void Projectile::Activate(const Vector2 &position, bool wasShotByPlayer)
+
+void Projectile::Activate(const Vector2& position, bool wasShotByPlayer)
 {
 	m_wasShotByPlayer = wasShotByPlayer;
 	SetPosition(position);
 
 	GameObject::Activate();
 }
+
 
 std::string Projectile::ToString() const
 {

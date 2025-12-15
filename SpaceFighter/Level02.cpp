@@ -4,7 +4,7 @@
 #include "BioEnemyShip.h"
 
 
-Level02::Level02(AircraftType type) : Level(type){}
+Level02::Level02(AircraftType type) : Level(type) {}
 
 void Level02::LoadContent(ResourceManager& resourceManager)
 {

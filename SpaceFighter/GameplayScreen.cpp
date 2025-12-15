@@ -25,57 +25,30 @@ GameplayScreen::GameplayScreen(AircraftType aircraftType)
     Show();
 }
 
+
+
 void GameplayScreen::LoadContent(ResourceManager& resourceManager)
 {
     m_pResourceManager = &resourceManager;
-
-    // Ensure a level exists first
-    if (!m_pLevel)
-        LoadLevel(m_levelIndex);
-
-    // Always create a player ship
-    PlayerShip* pPlayer = new PlayerShip(m_aircraftType);
-    // Attach Blaster so GetWeapon("Main Blaster") is never nullptr
-    Blaster* pBlaster = new Blaster("Main Blaster");
-
-    // If you later add projectile pool in Level, uncomment this
-    pBlaster->SetProjectilePool(&m_pLevel->GetProjectiles());
-    pPlayer->AttachItem(pBlaster, Vector2::UNIT_Y * -20);
-
-
-    // Load textures, sounds, etc.
-    pPlayer->LoadContent(resourceManager);
-    pPlayer->Activate();
-
-    m_pLevel->SetPlayerShip(pPlayer); //Give player to the level
-
-
-
-
-    // Add PlayerShip to level
-    m_pLevel->AddGameObject(pPlayer);
-
-
+    LoadLevel(m_levelIndex);
 }
-
-
 
 void GameplayScreen::LoadLevel(const int levelIndex)
 {
-	if (m_pLevel) delete m_pLevel;
+    if (m_pLevel) delete m_pLevel;
 
-	switch (levelIndex)
-	{
-	    case 0: m_pLevel = new Level01(m_aircraftType); break;  // pass the selected aircraft type
-	}
+    switch (levelIndex)
+    {
+    case 0: m_pLevel = new Level01(m_aircraftType); break;  // pass the selected aircraft type
+    }
 
-	m_pLevel->SetGameplayScreen(this);
-	m_pLevel->LoadContent(*m_pResourceManager);
+    m_pLevel->SetGameplayScreen(this);
+    m_pLevel->LoadContent(*m_pResourceManager);
 }
 
 void GameplayScreen::HandleInput(const InputState& input)
 {
-	m_pLevel->HandleInput(input);
+    m_pLevel->HandleInput(input);
 }
 
 void GameplayScreen::Update(const GameTime& gameTime) // updated the update to see if the game is over or a victory -- tommy
@@ -105,7 +78,7 @@ void GameplayScreen::Update(const GameTime& gameTime) // updated the update to s
     // gives us a victory screen once done.
     if (m_pLevel->IsComplete())
     {
-        m_gameEnded = true; 
+        m_gameEnded = true;
 
         SetOnRemove([this]()
             {
@@ -121,9 +94,9 @@ void GameplayScreen::Update(const GameTime& gameTime) // updated the update to s
 
 void GameplayScreen::Draw(SpriteBatch& spriteBatch)
 {
-	spriteBatch.Begin();
+    spriteBatch.Begin();
 
-	m_pLevel->Draw(spriteBatch);
+    m_pLevel->Draw(spriteBatch);
 
-	spriteBatch.End();
+    spriteBatch.End();
 }

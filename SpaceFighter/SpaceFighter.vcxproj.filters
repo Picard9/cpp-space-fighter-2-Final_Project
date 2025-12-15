@@ -119,6 +119,12 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files\Score</Filter>
     </ClCompile>
+    <ClCompile Include="SpreadShot.cpp">
+      <Filter>Source Files\Game Objects\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleShot.cpp">
+      <Filter>Source Files\Game Objects\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainMenuScreen.h">
@@ -189,6 +195,12 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Source Files\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="SpreadShot.h">
+      <Filter>Source Files\Game Objects\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleShot.h">
+      <Filter>Source Files\Game Objects\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

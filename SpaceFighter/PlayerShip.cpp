@@ -4,21 +4,35 @@
 #include "AircraftType.h"
 #include "Projectile.h"
 #include "Blaster.h"
+#include "SingleShot.h"
+#include "SpreadShot.h"
 
-
-
+Texture* Projectile::s_pTexture = nullptr;
 
 // User Stored selection
-PlayerShip::PlayerShip(AircraftType type): m_type(type) 
+PlayerShip::PlayerShip(AircraftType type, std::vector<Projectile*>* pProjectilePool)
+	: m_type(type), m_pProjectilePool(pProjectilePool)
 {
-	// Attach Main Blaster if not already present
-	if (!GetWeapon("Main Blaster"))
+	// Assign default weapon based on type
+	switch (m_type)
 	{
-		Blaster* pBlaster = new Blaster("Main Blaster");
-		AttachItem(pBlaster, Vector2::UNIT_Y * -20);
+		case AircraftType::DefaultFighter:
+		case AircraftType::LightFighter:
+		{
+			Weapon* pWeapon = new SingleShot("SingleShot");
+			pWeapon->SetProjectilePool(m_pProjectilePool); // pool of Projectile*
+			AttachItem(pWeapon, Vector2(0, -20));
+			break;
+		}
+		case AircraftType::HeavyBomber:
+		{
+			Weapon* pWeapon = new SpreadShot("Spread Shot", 5, 45.0f);
+			pWeapon->SetProjectilePool(m_pProjectilePool);
+			AttachItem(pWeapon, Vector2(0, -25));
+			break;
+		}
 	}
 }
-
 
 
 void PlayerShip::LoadContent(ResourceManager& resourceManager)
@@ -26,78 +40,63 @@ void PlayerShip::LoadContent(ResourceManager& resourceManager)
 	ConfineToScreen();
 	SetResponsiveness(0.1f);
 
+	// Load ship texture
 	switch (m_type)
 	{
-		case AircraftType::LightFighter:
-		{
-			m_pTexture = resourceManager.Load<Texture>("Textures\\LightFighterShip.png");
-			SetSpeed(500);
+	case AircraftType::LightFighter:
+		m_pTexture = resourceManager.Load<Texture>("Textures\\LightFighterShip.png");
+		SetSpeed(450);
+		break;
 
-			Weapon* pWeapon = GetWeapon("Main TriggerType");
-			if (pWeapon)
-			{
-				AudioSample* pAudio =
-					resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
-				pAudio->SetVolume(0.5f);
-				pWeapon->SetFireSound(pAudio);
-			}
-			break;
-		}
+	case AircraftType::HeavyBomber:
+		m_pTexture = resourceManager.Load<Texture>("Textures\\HeavyBomberShip.png");
+		SetSpeed(250);
+		break;
 
-		case AircraftType::HeavyBomber:
-		{
-			m_pTexture = resourceManager.Load<Texture>("Textures\\HeavyBomberShip.png");
-			SetSpeed(250);
-
-			Weapon* pWeapon = GetWeapon("Main Projectile");
-			if (pWeapon)
-			{
-				AudioSample* pAudio =
-					resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
-				pAudio->SetVolume(0.5f);
-				pWeapon->SetFireSound(pAudio);
-			}
-			break;
-		}
-
-		case AircraftType::DefaultFighter:
-		default:
-		{
-			m_pTexture = resourceManager.Load<Texture>("Textures\\PlayerShip.png");
-			SetSpeed(250);
-
-			Weapon* pWeapon = GetWeapon("Main Blaster");
-			if (pWeapon)
-			{
-				AudioSample* pAudio =
-					resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
-				pAudio->SetVolume(0.5f);
-				pWeapon->SetFireSound(pAudio);
-			}
-			break;
-		}
+	case AircraftType::DefaultFighter:
+	default:
+		m_pTexture = resourceManager.Load<Texture>("Textures\\PlayerShip.png");
+		SetSpeed(250);
+		break;
 	}
 
+	// Assign bullet textures and sounds to all weapons
+	for (auto& pair : m_attachments)
+	{
+		IAttachment* attachment = pair.second;
+		if (attachment->GetAttachmentType() != "Weapon") continue;
 
+		Weapon* weapon = static_cast<Weapon*>(attachment);
+		Texture* bulletTexture = nullptr;
+
+		// Keep your original paths
+		if (weapon->GetKey() == "Single Shot") bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\Bullet.png");
+		else if (weapon->GetKey() == "Spread Shot") bulletTexture = resourceManager.Load<Texture>("Textures\\Weapons\\bulletttt.png");
+		//else bulletTexture = resourceManager.Load<Texture>("Textures\\Bullet.png");
+
+		
+
+		if (!bulletTexture)
+		{
+			bulletTexture = resourceManager.Load<Texture>("Textures\\Bullet.png"); 
+		}
+
+		// Assign texture to all projectiles in the pool
+		for (Projectile* pProj : *m_pProjectilePool)
+			pProj->SetTexture(bulletTexture);
+
+		weapon->SetProjectileTexture(bulletTexture);
+
+		// Assign fire sound
+		AudioSample* pAudio = resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
+		pAudio->SetVolume(0.5f);
+		weapon->SetFireSound(pAudio);
+	}
+
+	// Set starting position
 	SetPosition(Game::GetScreenCenter() + Vector2::UNIT_Y * 300);
 }
 
-
-
-//void PlayerShip::LoadContent(ResourceManager& resourceManager)
-//{
-//	ConfineToScreen();
-//	SetResponsiveness(0.1);
-//
-//	m_pTexture = resourceManager.Load<Texture>("Textures\\PlayerShip.png");
-//
-//	AudioSample* pAudio = resourceManager.Load<AudioSample>("Audio\\Effects\\Laser.wav");
-//	pAudio->SetVolume(0.5f);
-//	GetWeapon("Main Blaster")->SetFireSound(pAudio);
-//
-//	SetPosition(Game::GetScreenCenter() + Vector2::UNIT_Y * 300);
-//
-//}
 
 
 void PlayerShip::Initialize(Level* pLevel, Vector2& startPosition)
@@ -171,7 +170,7 @@ void PlayerShip::Update(const GameTime& gameTime)
 			// move the ship to the left edge of the screen (keep Y the same)
 			SetPosition(Left + GetHalfDimensions().X, pPosition->Y);
 			m_velocity.X = 0; // remove any velocity that could potentially
-							  // keep the ship pinned against the edge
+			// keep the ship pinned against the edge
 		}
 		if (pPosition->X + GetHalfDimensions().X > Right) // right edge?
 		{
@@ -193,6 +192,7 @@ void PlayerShip::Update(const GameTime& gameTime)
 	Ship::Update(gameTime);
 }
 
+
 void PlayerShip::Draw(SpriteBatch& spriteBatch)
 {
 	if (IsActive())
@@ -202,7 +202,6 @@ void PlayerShip::Draw(SpriteBatch& spriteBatch)
 	}
 }
 
-
 Vector2 PlayerShip::GetHalfDimensions() const
 {
 	return m_pTexture->GetCenter();
@@ -211,4 +210,17 @@ Vector2 PlayerShip::GetHalfDimensions() const
 void PlayerShip::SetResponsiveness(const float responsiveness)
 {
 	m_responsiveness = Math::Clamp(0, 1, responsiveness);
+}
+
+void Projectile::Activate(const Vector2& position, bool isFriendly, const Vector2& velocity)
+{
+    SetPosition(position);        // Set projectile start position
+    m_velocity = velocity;        // Set velocity
+
+    // Force straight movement (prevents spread)
+    m_direction = velocity;
+    m_direction.Normalize();
+
+    m_isFriendly = isFriendly;
+    GameObject::Activate();       // Call base activate to mark as active
 }

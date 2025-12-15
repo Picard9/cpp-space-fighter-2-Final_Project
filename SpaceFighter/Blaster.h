@@ -11,8 +11,8 @@ public:
 
 	/** @brief Instantiate a blaster object.
 		@param isActive A flag to determine if the weapon is active. */
-	Blaster(const std::string &key) : Weapon(key) { }
-	virtual ~Blaster() { }
+	Blaster(const std::string& key) : Weapon(key) {}
+	virtual ~Blaster() {}
 
 	/** @brief Update the blaster.
 		@param gameTime A reference to the game time object. */
