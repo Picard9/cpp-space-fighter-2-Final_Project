@@ -3,11 +3,11 @@
 #include "Level.h"
 
 /** @brief The first level of the game. */
-class Level01 :	public Level
+class Level01 : public Level
 {
 
 public:
-	
+
 	/** @brief Instantiate a level object. */
 	Level01(AircraftType type);  // pass aircraft type to base Level
 	virtual ~Level01() {}

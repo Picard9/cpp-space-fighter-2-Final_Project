@@ -26,7 +26,7 @@ public:
 	/** @brief Instantiate a gameplay screen object.
 		@param levelIndex The index of the level to load. */
 
-	//GameplayScreen(const int levelIndex = 0);
+		//GameplayScreen(const int levelIndex = 0);
 	GameplayScreen(AircraftType aircraftType);
 
 	virtual ~GameplayScreen() {}
@@ -35,7 +35,7 @@ public:
 
 	/** @brief Load the content for the screen.
 		@param resourceManager A reference to the game's resource manager. */
-	virtual void LoadContent(ResourceManager& resourceManager) ;
+	virtual void LoadContent(ResourceManager& resourceManager);
 
 	/** @brief Handle input for the screen.
 		@param input The current state of all player input devices. */
@@ -60,9 +60,9 @@ private:
 
 	int m_levelIndex = 0;
 
-	Level *m_pLevel = nullptr;
+	Level* m_pLevel = nullptr;
 
-	ResourceManager *m_pResourceManager = nullptr;
+	ResourceManager* m_pResourceManager = nullptr;
 
 	/*Added by @Emilien*/
 	AircraftType m_aircraftType;

@@ -35,20 +35,20 @@ void GameplayScreen::LoadContent(ResourceManager& resourceManager)
 
 void GameplayScreen::LoadLevel(const int levelIndex)
 {
-	if (m_pLevel) delete m_pLevel;
+    if (m_pLevel) delete m_pLevel;
 
-	switch (levelIndex)
-	{
-	    case 0: m_pLevel = new Level01(m_aircraftType); break;  // pass the selected aircraft type
-	}
+    switch (levelIndex)
+    {
+    case 0: m_pLevel = new Level01(m_aircraftType); break;  // pass the selected aircraft type
+    }
 
-	m_pLevel->SetGameplayScreen(this);
-	m_pLevel->LoadContent(*m_pResourceManager);
+    m_pLevel->SetGameplayScreen(this);
+    m_pLevel->LoadContent(*m_pResourceManager);
 }
 
 void GameplayScreen::HandleInput(const InputState& input)
 {
-	m_pLevel->HandleInput(input);
+    m_pLevel->HandleInput(input);
 }
 
 void GameplayScreen::Update(const GameTime& gameTime) // updated the update to see if the game is over or a victory -- tommy
@@ -78,7 +78,7 @@ void GameplayScreen::Update(const GameTime& gameTime) // updated the update to s
     // gives us a victory screen once done.
     if (m_pLevel->IsComplete())
     {
-        m_gameEnded = true; 
+        m_gameEnded = true;
 
         SetOnRemove([this]()
             {
@@ -94,9 +94,9 @@ void GameplayScreen::Update(const GameTime& gameTime) // updated the update to s
 
 void GameplayScreen::Draw(SpriteBatch& spriteBatch)
 {
-	spriteBatch.Begin();
+    spriteBatch.Begin();
 
-	m_pLevel->Draw(spriteBatch);
+    m_pLevel->Draw(spriteBatch);
 
-	spriteBatch.End();
+    spriteBatch.End();
 }

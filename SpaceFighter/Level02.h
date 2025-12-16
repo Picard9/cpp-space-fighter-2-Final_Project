@@ -10,7 +10,7 @@ public:
 
 	/** @brief Instantiate a level object. */
 	Level02(AircraftType type);
-	virtual ~Level02() { }
+	virtual ~Level02() {}
 
 	/** @brief Load the content for the level, including game objects and resources.
 		@param resourceManager A reference to the game's resource manager,

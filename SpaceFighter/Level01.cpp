@@ -4,13 +4,13 @@
 
 
 
-Level01::Level01(AircraftType type): Level(type) { }
+Level01::Level01(AircraftType type) : Level(type) {}
 
 void Level01::LoadContent(ResourceManager& resourceManager)
 {
 
 	// Setup enemy ships
-	Texture *pTexture = resourceManager.Load<Texture>("Textures\\BioEnemyShip.png");
+	Texture* pTexture = resourceManager.Load<Texture>("Textures\\BioEnemyShip.png");
 
 	const int COUNT = 21;
 
@@ -22,7 +22,7 @@ void Level01::LoadContent(ResourceManager& resourceManager)
 		0.7, 0.75, 0.65, 0.8, 0.6,
 		0.5, 0.4, 0.6, 0.45, 0.55
 	};
-	
+
 	double delays[COUNT] =
 	{
 		0.0, 0.25, 0.25,
@@ -40,7 +40,7 @@ void Level01::LoadContent(ResourceManager& resourceManager)
 		delay += delays[i];
 		position.Set(xPositions[i] * Game::GetScreenWidth(), -pTexture->GetCenter().Y);
 
-		BioEnemyShip *pEnemy = new BioEnemyShip();
+		BioEnemyShip* pEnemy = new BioEnemyShip();
 		pEnemy->SetTexture(pTexture);
 		pEnemy->SetCurrentLevel(this);
 		pEnemy->Initialize(position, (float)delay);
