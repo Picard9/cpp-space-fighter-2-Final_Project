@@ -190,11 +190,16 @@ void Level::Update(const GameTime& gameTime)
 		m_pSectors[i].clear();
 	}
 
-	m_gameObjectIt = m_gameObjects.begin();
-	for (; m_gameObjectIt != m_gameObjects.end(); m_gameObjectIt++)
+	for (GameObject* pGameObject : m_gameObjects)
 	{
-		GameObject *pGameObject = (*m_gameObjectIt);
 		pGameObject->Update(gameTime);
+
+		UpdateSectorPosition(pGameObject);
+
+		if (pGameObject->IsActive() && pGameObject->HasMask(CollisionType::Enemy))
+		{
+			m_hasHadActiveEnemy = true;
+		}
 	}
 
 	for (unsigned int i = 0; i < m_totalSectorCount; i++)
@@ -204,10 +209,17 @@ void Level::Update(const GameTime& gameTime)
 			CheckCollisions(m_pSectors[i]);
 		}
 	}
-	
-	for (Explosion *pExplosion : s_explosions) pExplosion->Update(gameTime);
 
-	if (!m_pPlayerShip->IsActive()) GetGameplayScreen()->Exit();
+	for (Explosion* pExplosion : s_explosions)
+	{
+		pExplosion->Update(gameTime);
+	}
+
+	// game ends if player dies
+	if (!m_pPlayerShip->IsActive())
+	{
+		GetGameplayScreen()->Exit();
+	}
 }
 
 
@@ -327,23 +339,22 @@ void Level::Draw(SpriteBatch& spriteBatch)
 
 bool Level::IsComplete() const
 {
-	if (m_totalEnemiesToSpawn <= 0)
+	// Do not complete while boss is alive
+	if (m_bossAlive)
 		return false;
 
-	// must have spawned them all first
-	if (m_enemiesSpawned < m_totalEnemiesToSpawn)
+	if (!m_hasHadActiveEnemy)
 		return false;
 
-	// then wait until none are still active (killed or flew by / deactivated)
-	for (GameObject* pObject : m_gameObjects)
+	for (GameObject* obj : m_gameObjects)
 	{
-		EnemyShip* pEnemy = dynamic_cast<EnemyShip*>(pObject);
-		if (pEnemy && pEnemy->IsActive())
+		if (obj->IsActive())
 			return false;
 	}
 
 	return true;
 }
+
 
 
 

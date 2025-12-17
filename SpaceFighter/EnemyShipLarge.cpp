@@ -1,7 +1,6 @@
 #include "EnemyShipLarge.h"
 #include "Level.h"
 #include "PlayerShip.h"
-#include <iostream>
 
 EnemyShipLarge::EnemyShipLarge()
 {
@@ -12,53 +11,42 @@ EnemyShipLarge::EnemyShipLarge()
 
 void EnemyShipLarge::Update(const GameTime& gameTime)
 {
-    EnemyShip::Update(gameTime);
-
     if (!IsActive())
     {
-        std::cout << "Boss waiting to activate\n";
+        EnemyShip::Update(gameTime);
         return;
     }
 
     PlayerShip* pPlayer = GetCurrentLevel()->GetPlayerShip();
-    if (!pPlayer)
-        return;
+    if (pPlayer)
+    {
+        Vector2 direction = pPlayer->GetPosition() - GetPosition();
+        if (direction.LengthSquared() > 0.001f)
+            direction.Normalize();
 
-    Vector2 direction = pPlayer->GetPosition() - GetPosition();
+        TranslatePosition(direction.X * GetSpeed() * gameTime.GetElapsedTime(),
+            GetSpeed() * gameTime.GetElapsedTime());
+    }
 
-    if (direction.LengthSquared() > 0.001f)
-        direction.Normalize();
-
-    TranslatePosition(
-        direction.X * GetSpeed() * gameTime.GetElapsedTime(),
-        GetSpeed() * gameTime.GetElapsedTime()
-    );
+    EnemyShip::Update(gameTime);
 }
 
 void EnemyShipLarge::Draw(SpriteBatch& spriteBatch)
 {
-    if (!IsActive())
-        return;
+    if (!IsActive()) return;
 
     const float alpha = GetCurrentLevel()->GetAlpha();
-
-    spriteBatch.Draw(
-        m_pTexture,
-        GetPosition(),
-        Color::WHITE * alpha,
-        m_pTexture->GetCenter()
-    );
-    std::cout << "Boss draw at Y=" << GetPosition().Y << '\n';
-
+    spriteBatch.Draw(m_pTexture, GetPosition(), Color::WHITE * alpha, m_pTexture->GetCenter());
 }
 
-void EnemyShipLarge::Hit(const float damage)
+void EnemyShipLarge::Hit(float damage)
 {
     EnemyShip::Hit(damage);
 
-    if (!IsActive())
+    if (GetHitPoints() <= 0)
     {
-        GetCurrentLevel()->m_bossAlive = false;
-        std::cout << "Boss destroyed\n";
+        Deactivate();
+        if (Level* level = GetCurrentLevel())
+            level->m_bossAlive = false;
     }
 }
