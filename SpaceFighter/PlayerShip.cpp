@@ -163,8 +163,6 @@ void PlayerShip::HandleInput(const InputState& input)
 			<< m_killsSinceLastStealth << "/"
 			<< m_killsToActivateStealth << ")\n";
 	}
-
-
 }
 
 
@@ -317,7 +315,8 @@ float PlayerShip::GetStealthUnlockRatio() const
 {
 	if (m_killsToActivateStealth == 0) return 0.0f; // Avoid division by zero
 	// Return the ratio of kills
-	return static_cast<float>(m_killsSinceLastStealth) / m_killsToActivateStealth;
+	return (m_killsSinceLastStealth) / m_killsToActivateStealth;
+	//return static_cast<float>(m_killsSinceLastStealth) / m_killsToActivateStealth;
 }
 
 
