@@ -22,7 +22,7 @@ PlayerShip::PlayerShip(AircraftType type, std::vector<Projectile*>* pProjectileP
 	}
 	case AircraftType::HeavyBomber:
 	{
-		Weapon* pWeapon = new SpreadShot("Spread Shot", 5, 45.0f);
+		Weapon* pWeapon = new SpreadShot("Spread Shot", 1, 45.0f);
 		pWeapon->SetProjectilePool(m_pProjectilePool);
 		AttachItem(pWeapon, Vector2(0, -25));
 		break;
@@ -239,7 +239,7 @@ void PlayerShip::Draw(SpriteBatch& spriteBatch)
 	}
 	if (m_isStealthActive && m_pStealthFont)
 	{
-		int secondsLeft = static_cast<int>(std::ceil(m_stealthDuration));
+		int secondsLeft = (std::ceil(m_stealthDuration));
 		m_stealthCountdownText = "Stealth Mode: " + std::to_string(secondsLeft) + "s"; //Countdown display
 
 		spriteBatch.DrawString(
@@ -316,9 +316,7 @@ float PlayerShip::GetStealthUnlockRatio() const
 	if (m_killsToActivateStealth == 0) return 0.0f; // Avoid division by zero
 	// Return the ratio of kills
 	return (m_killsSinceLastStealth) / m_killsToActivateStealth;
-	//return static_cast<float>(m_killsSinceLastStealth) / m_killsToActivateStealth;
 }
-
 
 
 void PlayerShip::CheckEnemyCollisions()
